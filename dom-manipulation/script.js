@@ -4,8 +4,8 @@ let quotes = JSON.parse(localStorage.getItem("quotes")) || [
   { text: "Do one thing every day that scares you.", category: "Inspiration" }
 ];
 
-// Load last selected filter from local storage
 const savedFilter = localStorage.getItem("selectedCategory") || "all";
+
 document.addEventListener("DOMContentLoaded", () => {
   populateCategories();
   document.getElementById("categoryFilter").value = savedFilter;
@@ -47,7 +47,6 @@ function displayFilteredQuote() {
 
 document.getElementById("newQuote").addEventListener("click", displayFilteredQuote);
 
-// Example addQuote() function to be triggered from your form
 function addQuote() {
   const text = document.getElementById("newQuoteText").value.trim();
   const category = document.getElementById("newQuoteCategory").value.trim();
@@ -66,7 +65,6 @@ function saveQuotes() {
   localStorage.setItem("quotes", JSON.stringify(quotes));
 }
 
-// JSON Import/Export handlers
 function importFromJsonFile(event) {
   const reader = new FileReader();
   reader.onload = function (e) {
@@ -87,5 +85,57 @@ function exportToJsonFile() {
   a.download = "quotes.json";
   a.click();
   URL.revokeObjectURL(url);
+}
+
+// ---------------------------
+// 🛰️ Task 3: Server Sync + Conflict Resolution
+// ---------------------------
+
+const SERVER_URL = "https://jsonplaceholder.typicode.com/posts";
+
+// Sync every 30 seconds
+setInterval(syncWithServer, 30000); // every 30s
+
+async function syncWithServer() {
+  try {
+    const response = await fetch(SERVER_URL);
+    const serverData = await response.json();
+
+    // Simulate quote format: title = text, body = category
+    const serverQuotes = serverData.slice(0, 10).map(item => ({
+      text: item.title,
+      category: item.body.slice(0, 20) || "General"
+    }));
+
+    let newQuotesAdded = 0;
+
+    serverQuotes.forEach(serverQuote => {
+      const existsLocally = quotes.some(
+        local => local.text === serverQuote.text
+      );
+      if (!existsLocally) {
+        quotes.push(serverQuote);
+        newQuotesAdded++;
+      }
+    });
+
+    if (newQuotesAdded > 0) {
+      saveQuotes();
+      populateCategories();
+      notifyUser(`${newQuotesAdded} new quote(s) synced from server.`);
+    }
+  } catch (error) {
+    console.error("Failed to sync with server:", error);
+    notifyUser("⚠️ Could not sync with server. Check your connection.");
+  }
+}
+
+function notifyUser(message) {
+  let notify = document.getElementById("syncNotification");
+  notify.textContent = message;
+  notify.style.display = "block";
+  setTimeout(() => {
+    notify.style.display = "none";
+  }, 5000);
 }
 
