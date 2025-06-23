@@ -135,7 +135,7 @@ async function syncQuotes() {
     saveQuotes();
     populateCategories();
     displayRandomQuote();
-    document.getElementById("syncNotification").innerHTML = `✔ ${newCount} new quotes synced from server`;
+    document.getElementById("syncNotification").innerHTML = "Quotes synced with server!";
     document.getElementById("syncNotification").style.display = "block";
     setTimeout(() => {
       document.getElementById("syncNotification").style.display = "none";
