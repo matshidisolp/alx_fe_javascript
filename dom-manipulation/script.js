@@ -1,33 +1,30 @@
-// ✅ 1. Required array
+// ✅ Quotes array
 let quotes = [
   { text: "Believe you can and you're halfway there.", category: "Motivation" },
   { text: "The only limit to our realization of tomorrow is our doubts of today.", category: "Inspiration" },
   { text: "Life is 10% what happens to us and 90% how we react to it.", category: "Life" }
 ];
 
-// ✅ 2. DOM selections
 const quoteDisplay = document.getElementById("quoteDisplay");
 const categorySelect = document.getElementById("categorySelect");
 
-// ✅ 3. Required function: displayRandomQuote
-function displayRandomQuote() {
+// ✅ Must be named showRandomQuote and use innerHTML
+function showRandomQuote() {
   const selectedCategory = categorySelect.value;
   const filteredQuotes = selectedCategory === "all"
     ? quotes
     : quotes.filter(q => q.category.toLowerCase() === selectedCategory.toLowerCase());
 
   if (filteredQuotes.length === 0) {
-    quoteDisplay.textContent = "No quotes in this category.";
+    quoteDisplay.innerHTML = "No quotes in this category.";
     return;
   }
 
-  const randomIndex = Math.floor(Math.random() * filteredQuotes.length);
-  const randomQuote = filteredQuotes[randomIndex];
-
-  quoteDisplay.textContent = `"${randomQuote.text}" — [${randomQuote.category}]`;
+  const randomQuote = filteredQuotes[Math.floor(Math.random() * filteredQuotes.length)];
+  quoteDisplay.innerHTML = `"${randomQuote.text}" — [${randomQuote.category}]`;
 }
 
-// ✅ 4. Required function: addQuote
+// ✅ Must be named addQuote
 function addQuote() {
   const quoteText = document.getElementById("newQuoteText").value.trim();
   const quoteCategory = document.getElementById("newQuoteCategory").value.trim();
@@ -37,8 +34,7 @@ function addQuote() {
     return;
   }
 
-  const newQuote = { text: quoteText, category: quoteCategory };
-  quotes.push(newQuote);
+  quotes.push({ text: quoteText, category: quoteCategory });
   updateCategoryDropdown(quoteCategory);
 
   document.getElementById("newQuoteText").value = "";
@@ -47,9 +43,11 @@ function addQuote() {
   alert("New quote added!");
 }
 
-// ✅ 5. Utility function
+// ✅ Helper: update dropdown with new category
 function updateCategoryDropdown(newCategory) {
-  const exists = Array.from(categorySelect.options).some(option => option.value.toLowerCase() === newCategory.toLowerCase());
+  const exists = Array.from(categorySelect.options).some(option =>
+    option.value.toLowerCase() === newCategory.toLowerCase()
+  );
 
   if (!exists) {
     const newOption = document.createElement("option");
@@ -59,6 +57,6 @@ function updateCategoryDropdown(newCategory) {
   }
 }
 
-// ✅ 6. Required event listener
-document.getElementById("newQuote").addEventListener("click", displayRandomQuote);
+// ✅ Must attach this exact event listener
+document.getElementById("newQuote").addEventListener("click", showRandomQuote);
 
