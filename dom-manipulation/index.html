@@ -2,28 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dynamic Quote Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    #quoteDisplay {
+      margin: 20px 0;
+      font-size: 20px;
+      font-style: italic;
+    }
+    input, select, button {
+      margin: 5px;
+      padding: 8px;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
   <h1>Dynamic Quote Generator</h1>
 
-  <div>
-    <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
-    <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
-    <button onclick="addQuote()">Add Quote</button>
-  </div>
+  <!-- Dropdown for category filtering -->
+  <label for="categorySelect">Select Category:</label>
+  <select id="categorySelect">
+    <option value="all">All</option>
+  </select>
 
-  <div>
-    <label for="categorySelect">Filter by category:</label>
-    <select id="categorySelect">
-      <option value="all">All</option>
-    </select>
-  </div>
+  <!-- Display quote here -->
+  <div id="quoteDisplay">Click the button to see a quote!</div>
 
-  <div id="quoteDisplay" style="margin-top: 20px;"></div>
+  <!-- Button to show quote -->
   <button id="newQuote">Show New Quote</button>
 
+  <!-- JSON Import/Export Controls -->
+  <!-- The JavaScript will also create these elements, so these are optional -->
+  <!--
+  <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
+  <button onclick="exportToJsonFile()">Export Quotes</button>
+  -->
+
+  <!-- JavaScript logic -->
   <script src="script.js"></script>
 </body>
 </html>
+
